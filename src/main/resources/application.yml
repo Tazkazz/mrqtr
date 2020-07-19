@@ -1,1 +1,2 @@
 iTunes.rootUrl: https://itunes.apple.com/
+server.error.include-message: always
