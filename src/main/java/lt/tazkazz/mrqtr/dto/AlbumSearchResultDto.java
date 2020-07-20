@@ -1,16 +1,20 @@
 package lt.tazkazz.mrqtr.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AlbumSearchResultDto {
-    public int resultCount;
-    public List<AlbumDto> results;
+    private int resultCount;
+    private List<AlbumDto> results;
 
-    public AlbumSearchResultDto() {
-    }
-
-    public AlbumSearchResultDto(int resultCount, List<AlbumDto> results) {
-        this.resultCount = resultCount;
+    public AlbumSearchResultDto(List<AlbumDto> results) {
+        this.resultCount = results.size();
         this.results = results;
     }
 }

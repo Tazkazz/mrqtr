@@ -1,5 +1,6 @@
 package lt.tazkazz.mrqtr.web.v1;
 
+import lt.tazkazz.mrqtr.model.Album;
 import lt.tazkazz.mrqtr.repository.UserFavouriteArtistRepository;
 import lt.tazkazz.mrqtr.service.ItunesService;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static lt.tazkazz.mrqtr.DataBuilders.album;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -61,7 +61,7 @@ class UserControllerTest {
 
         when(itunesService.findArtistTopAlbums(eq(1337), eq(5)))
             .thenReturn(List.of(
-                album(10, "Artist", "Album 1", "URL 1", "URL 2", new BigDecimal("14.99"), "EUR", 7, LocalDate.parse("2020-05-07"), "Genre")
+                new Album(10, "Artist", "Album 1", "URL 1", "URL 2", new BigDecimal("14.99"), "EUR", 7, LocalDate.parse("2020-05-07"), "Genre")
             ));
 
         mockMvc.perform(get("/v1/users/42/top-albums"))

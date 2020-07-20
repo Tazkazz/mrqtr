@@ -1,26 +1,25 @@
 package lt.tazkazz.mrqtr.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lt.tazkazz.mrqtr.dto.ArtistDto;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Artist {
-    public int id;
-    public String name;
-    public String url;
-    public String genre;
-
-    public Artist(int id, String name, String url, String genre) {
-        this.id = id;
-        this.name = name;
-        this.url = url;
-        this.genre = genre;
-    }
+    private int id;
+    private String name;
+    private String url;
+    private String genre;
 
     public static Artist fromDto(ArtistDto dto) {
         return new Artist(
-            dto.amgArtistId,
-            dto.artistName,
-            dto.artistLinkUrl,
-            dto.primaryGenreName
+            dto.getAmgArtistId(),
+            dto.getArtistName(),
+            dto.getArtistLinkUrl(),
+            dto.getPrimaryGenreName()
         );
     }
 }

@@ -1,6 +1,8 @@
 package lt.tazkazz.mrqtr.service;
 
+import lt.tazkazz.mrqtr.dto.AlbumDto;
 import lt.tazkazz.mrqtr.dto.AlbumSearchResultDto;
+import lt.tazkazz.mrqtr.dto.ArtistDto;
 import lt.tazkazz.mrqtr.dto.ArtistSearchResultDto;
 import lt.tazkazz.mrqtr.exception.ItunesException;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static java.math.BigDecimal.ZERO;
-import static lt.tazkazz.mrqtr.DataBuilders.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,9 +36,9 @@ class ItunesServiceTest {
     @Test
     public void whenArtistsFoundInItunes_shouldReturnMappedArtists() {
         when(restTemplate.getForObject(any(), eq(ArtistSearchResultDto.class), eq("artist")))
-            .thenReturn(artistSearchResultDto(List.of(
-                artistDto(null, "Unknown artist", "URL", "Genre"),
-                artistDto(1337, "Artist", "URL 2", "Cool genre")
+            .thenReturn(new ArtistSearchResultDto(List.of(
+                new ArtistDto(null, "Unknown artist", "URL", "Genre"),
+                new ArtistDto(1337, "Artist", "URL 2", "Cool genre")
             )));
 
         var result = itunesService.findArtistsByKeyword("artist");
@@ -46,16 +47,16 @@ class ItunesServiceTest {
         assertThat(result.size(), is(1));
 
         var firstArtist = result.get(0);
-        assertThat(firstArtist.id, is(1337));
-        assertThat(firstArtist.name, is("Artist"));
-        assertThat(firstArtist.url, is("URL 2"));
-        assertThat(firstArtist.genre, is("Cool genre"));
+        assertThat(firstArtist.getId(), is(1337));
+        assertThat(firstArtist.getName(), is("Artist"));
+        assertThat(firstArtist.getUrl(), is("URL 2"));
+        assertThat(firstArtist.getGenre(), is("Cool genre"));
     }
 
     @Test
     public void whenNoArtistsFoundInItunes_shouldReturnEmptyList() {
         when(restTemplate.getForObject(any(), eq(ArtistSearchResultDto.class), eq("artist")))
-            .thenReturn(artistSearchResultDto(List.of()));
+            .thenReturn(new ArtistSearchResultDto(List.of()));
 
         var result = itunesService.findArtistsByKeyword("artist");
 
@@ -85,10 +86,10 @@ class ItunesServiceTest {
     @Test
     public void whenTopAlbumsFoundInItunes_shouldReturnMappedAlbums() {
         when(restTemplate.getForObject(any(), eq(AlbumSearchResultDto.class), eq(1337), eq(5)))
-            .thenReturn(albumSearchResultDto(List.of(
-                albumDto("Artist", 0, "", "", "", "", ZERO, "", 0, null, ""),
-                albumDto("Album", 10, "Artist", "Album 1", "URL 1", "URL 2", new BigDecimal("14.99"), "EUR", 7, LocalDate.parse("2020-05-07"), "Genre"),
-                albumDto("Album", 20, "Artist", "Album 2", "URL 3", "URL 4", new BigDecimal("8.00"), "GBP", 5, LocalDate.parse("1999-01-23"), "Genre 2")
+            .thenReturn(new AlbumSearchResultDto(List.of(
+                new AlbumDto("Artist", 0, "", "", "", "", ZERO, "", 0, null, ""),
+                new AlbumDto("Album", 10, "Artist", "Album 1", "URL 1", "URL 2", new BigDecimal("14.99"), "EUR", 7, LocalDate.parse("2020-05-07"), "Genre"),
+                new AlbumDto("Album", 20, "Artist", "Album 2", "URL 3", "URL 4", new BigDecimal("8.00"), "GBP", 5, LocalDate.parse("1999-01-23"), "Genre 2")
             )));
 
         var result = itunesService.findArtistTopAlbums(1337, 5);
@@ -97,34 +98,34 @@ class ItunesServiceTest {
         assertThat(result.size(), is(2));
 
         var firstAlbum = result.get(0);
-        assertThat(firstAlbum.id, is(10));
-        assertThat(firstAlbum.artistName, is("Artist"));
-        assertThat(firstAlbum.name, is("Album 1"));
-        assertThat(firstAlbum.url, is("URL 1"));
-        assertThat(firstAlbum.artworkUrl, is("URL 2"));
-        assertThat(firstAlbum.price, is(new BigDecimal("14.99")));
-        assertThat(firstAlbum.currency, is("EUR"));
-        assertThat(firstAlbum.tracks, is(7));
-        assertThat(firstAlbum.releaseDate, is(LocalDate.parse("2020-05-07")));
-        assertThat(firstAlbum.genre, is("Genre"));
+        assertThat(firstAlbum.getId(), is(10));
+        assertThat(firstAlbum.getArtistName(), is("Artist"));
+        assertThat(firstAlbum.getName(), is("Album 1"));
+        assertThat(firstAlbum.getUrl(), is("URL 1"));
+        assertThat(firstAlbum.getArtworkUrl(), is("URL 2"));
+        assertThat(firstAlbum.getPrice(), is(new BigDecimal("14.99")));
+        assertThat(firstAlbum.getCurrency(), is("EUR"));
+        assertThat(firstAlbum.getTracks(), is(7));
+        assertThat(firstAlbum.getReleaseDate(), is(LocalDate.parse("2020-05-07")));
+        assertThat(firstAlbum.getGenre(), is("Genre"));
 
         var secondAlbum = result.get(1);
-        assertThat(secondAlbum.id, is(20));
-        assertThat(secondAlbum.artistName, is("Artist"));
-        assertThat(secondAlbum.name, is("Album 2"));
-        assertThat(secondAlbum.url, is("URL 3"));
-        assertThat(secondAlbum.artworkUrl, is("URL 4"));
-        assertThat(secondAlbum.price, is(new BigDecimal("8.00")));
-        assertThat(secondAlbum.currency, is("GBP"));
-        assertThat(secondAlbum.tracks, is(5));
-        assertThat(secondAlbum.releaseDate, is(LocalDate.parse("1999-01-23")));
-        assertThat(secondAlbum.genre, is("Genre 2"));
+        assertThat(secondAlbum.getId(), is(20));
+        assertThat(secondAlbum.getArtistName(), is("Artist"));
+        assertThat(secondAlbum.getName(), is("Album 2"));
+        assertThat(secondAlbum.getUrl(), is("URL 3"));
+        assertThat(secondAlbum.getArtworkUrl(), is("URL 4"));
+        assertThat(secondAlbum.getPrice(), is(new BigDecimal("8.00")));
+        assertThat(secondAlbum.getCurrency(), is("GBP"));
+        assertThat(secondAlbum.getTracks(), is(5));
+        assertThat(secondAlbum.getReleaseDate(), is(LocalDate.parse("1999-01-23")));
+        assertThat(secondAlbum.getGenre(), is("Genre 2"));
     }
 
     @Test
     public void whenNoTopAlbumsFoundInItunes_shouldReturnEmptyList() {
         when(restTemplate.getForObject(any(), eq(AlbumSearchResultDto.class), eq(1337), eq(5)))
-            .thenReturn(albumSearchResultDto(List.of()));
+            .thenReturn(new AlbumSearchResultDto(List.of()));
 
         var result = itunesService.findArtistTopAlbums(1337, 5);
 

@@ -1,6 +1,7 @@
 package lt.tazkazz.mrqtr.web.v1;
 
 import lt.tazkazz.mrqtr.exception.ItunesException;
+import lt.tazkazz.mrqtr.model.Artist;
 import lt.tazkazz.mrqtr.service.ItunesService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static lt.tazkazz.mrqtr.DataBuilders.artist;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -30,7 +30,7 @@ class ArtistControllerTest {
     public void whenArtistsFoundInItunes_shouldRespondWithMappedArtists() throws Exception {
         when(itunesService.findArtistsByKeyword(eq("artist")))
             .thenReturn(List.of(
-                artist(1337, "Artist", "URL", "Cool genre")
+                new Artist(1337, "Artist", "URL", "Cool genre")
             ));
 
         mockMvc.perform(get("/v1/artists/search?keyword=artist"))

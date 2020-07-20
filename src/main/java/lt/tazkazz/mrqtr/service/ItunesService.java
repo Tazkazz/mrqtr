@@ -32,8 +32,8 @@ public class ItunesService {
             var response = restTemplate.getForObject("/search?entity=allArtist&term={term}", ArtistSearchResultDto.class, keyword);
 
             if (response != null) {
-                log.info("Found {} artists with keyword '{}'", response.resultCount, keyword);
-                return toArtistModel(response.results);
+                log.info("Found {} artists with keyword '{}'", response.getResultCount(), keyword);
+                return toArtistModel(response.getResults());
             }
 
             log.info("Search returned null for artists with keyword '{}'", keyword);
@@ -51,7 +51,7 @@ public class ItunesService {
 
             if (response != null) {
                 log.info("Found top albums of artist with id '{}'", artistId);
-                return toAlbumModel(response.results);
+                return toAlbumModel(response.getResults());
             }
 
             log.info("Search returned null for top albums of artist with id '{}'", artistId);
@@ -64,14 +64,14 @@ public class ItunesService {
 
     private List<Artist> toArtistModel(List<ArtistDto> artists) {
         return artists.stream()
-            .filter(artist -> artist.amgArtistId != null)
+            .filter(artist -> artist.getAmgArtistId() != null)
             .map(Artist::fromDto)
             .collect(Collectors.toList());
     }
 
     private List<Album> toAlbumModel(List<AlbumDto> albums) {
         return albums.stream()
-            .filter(album -> ALBUM_COLLECTION_TYPE.equals(album.collectionType))
+            .filter(album -> ALBUM_COLLECTION_TYPE.equals(album.getCollectionType()))
             .map(Album::fromDto)
             .collect(Collectors.toList());
     }
