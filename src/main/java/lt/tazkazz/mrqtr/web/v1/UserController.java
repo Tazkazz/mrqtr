@@ -1,5 +1,7 @@
 package lt.tazkazz.mrqtr.web.v1;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lt.tazkazz.mrqtr.exception.FavouriteArtistNotFoundException;
 import lt.tazkazz.mrqtr.repository.UserFavouriteArtistRepository;
 import lt.tazkazz.mrqtr.service.ItunesService;
@@ -25,17 +27,24 @@ public class UserController {
     @Autowired
     private ItunesService itunesService;
 
+    @Operation(summary = "Save user's favourite artist")
     @PostMapping("/{userId}/favourite-artist")
     public void saveFavouriteArtist(
+        @Parameter(description = "User ID")
         @PathVariable int userId,
+
         @RequestBody @Valid FavouriteArtistRequest request
     ) {
         userFavouriteArtistRepository.saveForUserId(userId, request.artistId);
     }
 
+    @Operation(summary = "Get user's favourite artist's top albums")
     @GetMapping("/{userId}/top-albums")
     public AlbumCollection getTopAlbums(
+        @Parameter(description = "User ID")
         @PathVariable int userId,
+
+        @Parameter(description = "Number of albums")
         @RequestParam(required = false, defaultValue = "5") int size
     ) {
         var artistId = userFavouriteArtistRepository.getByUserId(userId);

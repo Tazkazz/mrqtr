@@ -5,3 +5,8 @@ iTunes:
   cache:
     ttlSeconds: 3600
     maximumSize: 100
+
+springdoc:
+  packagesToScan: lt.tazkazz.mrqtr.web.v1
+  apiDocs:
+    path: /api-docs
