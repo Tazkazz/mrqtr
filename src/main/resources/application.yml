@@ -1,2 +1,7 @@
-iTunes.rootUrl: https://itunes.apple.com/
 server.error.include-message: always
+
+iTunes:
+  rootUrl: https://itunes.apple.com/
+  cache:
+    ttlSeconds: 3600
+    maximumSize: 100

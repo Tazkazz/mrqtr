@@ -10,6 +10,7 @@ import lt.tazkazz.mrqtr.model.Artist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +27,7 @@ public class ItunesService {
 
     private final Logger log = LoggerFactory.getLogger(ItunesService.class);
 
+    @Cacheable("artists")
     public List<Artist> findArtistsByKeyword(String keyword) {
         try {
             log.info("Searching for artists with keyword '{}'", keyword);
@@ -44,6 +46,7 @@ public class ItunesService {
         }
     }
 
+    @Cacheable("albums")
     public List<Album> findArtistTopAlbums(int artistId, int size) {
         try {
             log.info("Searching for artist's '{}' top {} albums", artistId, size);
